@@ -1,21 +1,79 @@
-<div class="page">
-  <header class="header">
-    <h1>FlowOps</h1>
-    <p>Approval workflow dashboard</p>
-  </header>
-
-  <section class="card">
-    <h2>Workflow Requests</h2>
-
-    <div *ngIf="workflows.length === 0" class="empty">
-      No workflows loaded yet.
+<div class="dashboard">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Workflow Management Platform</p>
+      <h1>{{ title }}</h1>
+      <p class="subtitle">
+        Manage approval workflows, monitor request statuses, and streamline operations in one place.
+      </p>
     </div>
 
-    <div *ngFor="let workflow of workflows" class="workflow-item">
-      <div>
-        <strong>{{ workflow.requestName }}</strong>
+    <button class="primary-btn" (click)="loadWorkflows()">Refresh Data</button>
+  </header>
+
+  <section class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-label">Total Requests</p>
+      <h2>{{ getTotalCount() }}</h2>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-label">Pending</p>
+      <h2>{{ getPendingCount() }}</h2>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-label">Approved</p>
+      <h2>{{ getApprovedCount() }}</h2>
+    </div>
+
+    <div class="stat-card">
+      <p class="stat-label">Rejected</p>
+      <h2>{{ getRejectedCount() }}</h2>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <div class="search-box">
+      <input type="text" placeholder="Search by request name, status, or ID..." [(ngModel)]="searchTerm"
+        (input)="filterWorkflows()" />
+    </div>
+  </section>
+
+  <section *ngIf="loading" class="state-card">
+    <p>Loading workflows...</p>
+  </section>
+
+  <section *ngIf="error && !loading" class="state-card error">
+    <p>{{ error }}</p>
+  </section>
+
+  <section *ngIf="!loading && !error && filteredWorkflows.length === 0" class="state-card">
+    <p>No workflows found.</p>
+  </section>
+
+  <section *ngIf="!loading && !error && filteredWorkflows.length > 0" class="workflow-grid">
+    <div class="workflow-card" *ngFor="let workflow of filteredWorkflows">
+      <div class="card-top">
+        <div>
+          <p class="workflow-id">Request #{{ workflow.id }}</p>
+          <h3>{{ workflow.requestName }}</h3>
+        </div>
+
+        <span [ngClass]="getStatusClass(workflow.status)">
+          {{ workflow.status }}
+        </span>
       </div>
-      <div>Status: {{ workflow.status }}</div>
+
+      <p class="workflow-desc">
+        This workflow request is currently marked as <strong>{{ workflow.status }}</strong> and is being tracked within
+        the FlowOps dashboard.
+      </p>
+
+      <div class="card-footer">
+        <button class="secondary-btn">View Details</button>
+        <button class="ghost-btn">Track Status</button>
+      </div>
     </div>
   </section>
 </div>
