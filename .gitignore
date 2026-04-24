@@ -1,0 +1,19 @@
+# Java
+target/
+*.class
+*.log
+.mvn/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Node
+node_modules/
+dist/
+
+# OS
+.DS_Store
+
+# Env
+.env
