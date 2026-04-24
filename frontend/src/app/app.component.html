@@ -1,0 +1,21 @@
+<div class="page">
+  <header class="header">
+    <h1>FlowOps</h1>
+    <p>Approval workflow dashboard</p>
+  </header>
+
+  <section class="card">
+    <h2>Workflow Requests</h2>
+
+    <div *ngIf="workflows.length === 0" class="empty">
+      No workflows loaded yet.
+    </div>
+
+    <div *ngFor="let workflow of workflows" class="workflow-item">
+      <div>
+        <strong>{{ workflow.requestName }}</strong>
+      </div>
+      <div>Status: {{ workflow.status }}</div>
+    </div>
+  </section>
+</div>
